@@ -1,0 +1,34 @@
+# NFS configuration on Linux server
+##################################
+
+#We need 2 servers (NFS and Client) to configure and test NFS.
+
+In NFS server
+##############
+
+yum install nfs-utils
+systemctl start nfs-server
+systemctl start nfs-utils
+rpcinfo -p | grep nfs      # To verify NFS presence
+mkdir -p /mnt/myshare
+chmod 0664 /mnt/myshare
+vi /etc/exports
+   /mnt/myshare <client ip>(rw,sync)
+exportfs -ar               # To export previous changes
+exportfs -s                # Will show thw export destination
+
+
+firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd reload
+
+In Client server
+#################
+yum install nfs-utils
+systemctl start nfs-utils
+showmount -e <NFS server ip> # Will show the available mounts in the specified IP
+mkdir -p /mynfs/myshare
+mount -t nfs <NFS server ip>:/mnt/myshare /mynfs/myshare
+vi /etc/fstab
+    <NFS server ip>:/mnt/myshare /mynfs/myshare nfs default 0  0    # To make the mount permanent
