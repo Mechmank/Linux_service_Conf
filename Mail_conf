@@ -1,0 +1,20 @@
+#Mail configuration in RHEL / CentOS
+##################################################
+
+# Follow the below steps to send a mail from RHEL server using SSMTP (Send only Secured Mail Transfer Protocol)
+# Port: 587
+
+yum install ssmtp   # To install ssmtp service
+vi /etc/ssmtp/ssmtp.conf
+
+#Edit the file as follows
+
+TLS_CA_FILE=<Conf file lication> (default)
+root=<Your gmail ID>
+mailhub=smtp.gmail.com:587
+AuthUser=<Your gmail ID>
+AuthPass=<Your gamil auth password>
+UseTLS=YES
+UseSTARTTLS=YES
+rewriteDomain=gmail.com
+FromLineoverrides=YES
